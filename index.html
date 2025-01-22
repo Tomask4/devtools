@@ -368,6 +368,11 @@
         if (document.getElementById('colorPicker')) {
             updateColorInfo();
         }
+        function encodeBase64() {
+            const input = document.getElementById('base64Input').value;
+            const encoded = btoa(input);
+            document.getElementById('base64Output').textContent = encoded;
+        }
     </script>
 </body>
 </html>
