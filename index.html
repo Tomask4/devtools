@@ -368,11 +368,119 @@
         if (document.getElementById('colorPicker')) {
             updateColorInfo();
         }
+         // Base64 Converter
         function encodeBase64() {
             const input = document.getElementById('base64Input').value;
             const encoded = btoa(input);
             document.getElementById('base64Output').textContent = encoded;
         }
+
+        function decodeBase64() {
+            const input = document.getElementById('base64Input').value;
+            try {
+                const decoded = atob(input);
+                document.getElementById('base64Output').textContent = decoded;
+            } catch (e) {
+                document.getElementById('base64Output').textContent = 'Ongeldige Base64 input';
+            }
+        }
+
+        // JSON Formatter
+        function formatJSON() {
+            const input = document.getElementById('jsonInput').value;
+            try {
+                const parsed = JSON.parse(input);
+                const formatted = JSON.stringify(parsed, null, 2);
+                document.getElementById('jsonOutput').textContent = formatted;
+            } catch (e) {
+                document.getElementById('jsonOutput').textContent = 'Ongeldige JSON';
+            }
+        }
+
+        // Color Converter
+        function updateColorInfo() {
+            const color = document.getElementById('colorPicker').value;
+            const preview = document.getElementById('colorPreview');
+            const output = document.getElementById('colorOutput');
+            
+            preview.style.backgroundColor = color;
+            
+            // Convert hex to RGB
+            const r = parseInt(color.substr(1,2), 16);
+            const g = parseInt(color.substr(3,2), 16);
+            const b = parseInt(color.substr(5,2), 16);
+            
+            output.innerHTML = `
+                HEX: ${color}<br>
+                RGB: rgb(${r}, ${g}, ${b})<br>
+                HSL: ${rgbToHSL(r, g, b)}
+            `;
+        }
+
+        function rgbToHSL(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+
+            return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
+        }
+
+        // URL Encoder/Decoder
+        function encodeURL() {
+            const input = document.getElementById('urlInput').value;
+            document.getElementById('urlOutput').textContent = encodeURIComponent(input);
+        }
+
+        function decodeURL() {
+            const input = document.getElementById('urlInput').value;
+            document.getElementById('urlOutput').textContent = decodeURIComponent(input);
+        }
+
+        // Hash Generator (simple MD5 implementation)
+        function generateHash() {
+            const input = document.getElementById('hashInput').value;
+            const hash = simpleMD5(input);
+            document.getElementById('hashOutput').textContent = hash;
+        }
+
+        function simpleMD5(input) {
+            // Dit is een gesimplificeerde versie voor demonstratie
+            let hash = 0;
+            for (let i = 0; i < input.length; i++) {
+                const char = input.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash).toString(16);
+        }
+
+        // Lorem Ipsum Generator
+        function generateLorem() {
+            const count = document.getElementById('paragraphCount').value;
+            const lorem = Array(parseInt(count)).fill().map(() => 
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            ).join('\n\n');
+            document.getElementById('loremOutput').textContent = lorem;
+        }
+
+        // Initialize color tool
+        updateColorInfo();
     </script>
 </body>
 </html>
