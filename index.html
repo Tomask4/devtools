@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Developer Toolkit Pro</title>
+    <style>
+        /* Bestaande styles behouden */
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --background: #f8fafc;
+            --text: #1e293b;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 2rem;
+        }
+        
+        .tool {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tool h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        textarea, input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: var(--secondary);
+        }
+        
+        .output {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f1f5f9;
+            border-radius: 4px;
+            word-wrap: break-word;
+        }
+        
+        .color-preview {
+            width: 100px;
+            height: 100px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .flex-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Nieuwe styles voor extra tools */
+        .regex-matches {
+            background: #e2e8f0;
+            padding: 5px;
+            margin-top: 5px;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+
+        .password-strength {
+            height: 5px;
+            margin-top: 5px;
+            background: #ddd;
+        }
+
+        .password-strength div {
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .css-preview {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            min-height: 100px;
+        }
+
+        .code-preview {
+            font-family: monospace;
+            white-space: pre-wrap;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Developer Toolkit Pro</h1>
+            <p>Een uitgebreide verzameling tools voor webontwikkelaars</p>
+        </header>
+
+        <div class="tools-grid">
+            <!-- Bestaande tools behouden -->
+            <!-- Base64 Converter -->
+            <div class="tool">
+                <h2>Base64 Converter</h2>
+                <textarea id="base64Input" placeholder="Voer tekst in om te converteren"></textarea>
+                <div class="flex-container">
+                    <button onclick="encodeBase64()">Encode</button>
+                    <button onclick="decodeBase64()">Decode</button>
+                </div>
+                <div id="base64Output" class="output"></div>
+            </div>
+
+            <!-- JSON Formatter -->
+            <div class="tool">
+                <h2>JSON Formatter</h2>
+                <textarea id="jsonInput" placeholder="Voer JSON in om te formatteren"></textarea>
+                <button onclick="formatJSON()">Formatteren</button>
+                <div id="jsonOutput" class="output"></div>
+            </div>
+
+            <!-- Nieuwe Tool: Regex Tester -->
+            <div class="tool">
+                <h2>Regex Tester</h2>
+                <input type="text" id="regexPattern" placeholder="Voer regex pattern in">
+                <textarea id="regexText" placeholder="Voer test tekst in"></textarea>
+                <button onclick="testRegex()">Test Regex</button>
+                <div id="regexOutput" class="output"></div>
+            </div>
+
+            <!-- Nieuwe Tool: CSS Minifier -->
+            <div class="tool">
+                <h2>CSS Minifier</h2>
+                <textarea id="cssInput" placeholder="Voer CSS code in"></textarea>
+                <button onclick="minifyCSS()">Minify CSS</button>
+                <div id="cssOutput" class="output"></div>
+            </div>
+
+            <!-- Nieuwe Tool: Password Generator -->
+            <div class="tool">
+                <h2>Wachtwoord Generator</h2>
+                <div class="flex-container">
+                    <input type="number" id="passLength" value="12" min="8" max="32">
+                    <button onclick="generatePassword()">Genereer</button>
+                </div>
+                <div class="flex-container">
+                    <input type="checkbox" id="useUpper" checked> Hoofdletters
+                    <input type="checkbox" id="useNumbers" checked> Nummers
+                    <input type="checkbox" id="useSpecial" checked> Speciale tekens
+                </div>
+                <div id="passwordOutput" class="output"></div>
+            </div>
+
+            <!-- Nieuwe Tool: Unix Timestamp Converter -->
+            <div class="tool">
+                <h2>Timestamp Converter</h2>
+                <input type="text" id="timestampInput" placeholder="Voer Unix timestamp in">
+                <button onclick="convertTimestamp()">Convert</button>
+                <div id="timestampOutput" class="output"></div>
+            </div>
+
+            <!-- Nieuwe Tool: HTML Encoder/Decoder -->
+            <div class="tool">
+                <h2>HTML Encoder/Decoder</h2>
+                <textarea id="htmlInput" placeholder="Voer HTML tekst in"></textarea>
+                <div class="flex-container">
+                    <button onclick="encodeHTML()">Encode</button>
+                    <button onclick="decodeHTML()">Decode</button>
+                </div>
+                <div id="htmlOutput" class="output"></div>
+            </div>
+
+            <!-- Nieuwe Tool: Code Beautifier -->
+            <div class="tool">
+                <h2>Code Beautifier</h2>
+                <textarea id="codeInput" placeholder="Voer code in"></textarea>
+                <select id="languageSelect">
+                    <option value="javascript">JavaScript</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                </select>
+                <button onclick="beautifyCode()">Beautify</button>
+                <div id="codeOutput" class="output code-preview"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Bestaande functies behouden en nieuwe toevoegen
+
+        // Regex Tester
+        function testRegex() {
+            const pattern = document.getElementById('regexPattern').value;
+            const text = document.getElementById('regexText').value;
+            const output = document.getElementById('regexOutput');
+            
+            try {
+                const regex = new RegExp(pattern, 'g');
+                const matches = text.match(regex);
+                output.innerHTML = matches ? 
+                    `Gevonden matches (${matches.length}): ${matches.join(', ')}` :
+                    'Geen matches gevonden';
+            } catch (e) {
+                output.textContent = 'Ongeldige regex pattern';
+            }
+        }
+
+        // CSS Minifier
+        function minifyCSS() {
+            let css = document.getElementById('cssInput').value;
+            css = css.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '') // Remove comments
+                .replace(/\s+/g, ' ') // Replace whitespace
+                .replace(/\s*([:;{}])\s*/g, '$1') // Remove spaces around symbols
+                .trim();
+            document.getElementById('cssOutput').textContent = css;
+        }
+
+        // Password Generator
+        function generatePassword() {
+            const length = document.getElementById('passLength').value;
+            const upper = document.getElementById('useUpper').checked;
+            const numbers = document.getElementById('useNumbers').checked;
+            const special = document.getElementById('useSpecial').checked;
+            
+            let chars = 'abcdefghijklmnopqrstuvwxyz';
+            if (upper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (numbers) chars += '0123456789';
+            if (special) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            document.getElementById('passwordOutput').textContent = password;
+        }
+
+        // Unix Timestamp Converter
+        function convertTimestamp() {
+            const timestamp = document.getElementById('timestampInput').value;
+            try {
+                const date = new Date(timestamp * 1000);
+                document.getElementById('timestampOutput').textContent = 
+                    date.toLocaleString() + ' (' + date.toISOString() + ')';
+            } catch (e) {
+                document.getElementById('timestampOutput').textContent = 'Ongeldige timestamp';
+            }
+        }
+
+        // HTML Encoder/Decoder
+        function encodeHTML() {
+            const input = document.getElementById('htmlInput').value;
+            const encoded = input
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+            document.getElementById('htmlOutput').textContent = encoded;
+        }
+
+        function decodeHTML() {
+            const input = document.getElementById('htmlInput').value;
+            const decoded = input
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&quot;/g, '"')
+                .replace(/&#039;/g, "'");
+            document.getElementById('htmlOutput').textContent = decoded;
+        }
+
+        // Code Beautifier
+        function beautifyCode() {
+            const code = document.getElementById('codeInput').value;
+            const language = document.getElementById('languageSelect').value;
+            let beautified = code;
+            
+            // Eenvoudige beautifier voor demonstratie
+            if (language === 'javascript') {
+                beautified = beautifyJS(code);
+            } else if (language === 'html') {
+                beautified = beautifyHTML(code);
+            } else if (language === 'css') {
+                beautified = beautifyCSS(code);
+            }
+            
+            document.getElementById('codeOutput').textContent = beautified;
+        }
+
+        function beautifyJS(code) {
+            // Eenvoudige JS formatting
+            return code
+                .replace(/([{;}])/g, '$1\n')
+                .replace(/\s*{\s*/g, ' {\n    ')
+                .replace(/\s*}\s*/g, '\n}\n')
+                .replace(/;(?!\n)/g, ';\n    ');
+        }
+
+        function beautifyHTML(code) {
+            // Eenvoudige HTML formatting
+            return code
+                .replace(/>\s*</g, '>\n<')
+                .replace(/(<[^\/].*?>)/g, '    $1');
+        }
+
+        function beautifyCSS(code) {
+            // Eenvoudige CSS formatting
+            return code
+                .replace(/\s*{\s*/g, ' {\n    ')
+                .replace(/;\s*/g, ';\n    ')
+                .replace(/\s*}\s*/g, '\n}\n');
+        }
+
+        // Initialisatie voor bestaande tools
+        if (document.getElementById('colorPicker')) {
+            updateColorInfo();
+        }
+    </script>
+</body>
+</html>
